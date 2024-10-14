@@ -27,13 +27,13 @@
         h1 {
             text-align: center;
         }
-        .introduction, .etf-descriptions {
+        .introduction {
             margin-bottom: 20px;
             padding: 15px;
             background-color: #f8f9fa;
             border-radius: 5px;
         }
-        .introduction p, .introduction ul, .etf-descriptions p {
+        .introduction p, .introduction ul {
             margin-bottom: 10px;
         }
         .introduction ul {
@@ -115,28 +115,17 @@
             
             <label for="etfSelect">選擇ETF:</label>
             <select id="etfSelect">
-                <option value="VT">VT - Vanguard Total World Stock ETF</option>
-                <option value="VTI">VTI - Vanguard Total Stock Market ETF</option>
-                <option value="VOO">VOO - Vanguard S&P 500 ETF</option>
-                <option value="QQQ">QQQ - Invesco QQQ Trust</option>
-                <option value="SMH">SMH - VanEck Semiconductor ETF</option>
-                <option value="AOA">AOA - iShares Core Aggressive Allocation ETF</option>
+                <option value="VT">VT - Vanguard Total World Stock ETF (全球股票市場指數)</option>
+                <option value="VTI">VTI - Vanguard Total Stock Market ETF (全美國股市指數)</option>
+                <option value="VOO">VOO - Vanguard S&P 500 ETF (追蹤標準普爾500指數)</option>
+                <option value="QQQ">QQQ - Invesco QQQ Trust (納斯達克科技股指數)</option>
+                <option value="SMH">SMH - VanEck Semiconductor ETF (追蹤半導體產業)</option>
+                <option value="AOA">AOA - iShares Core Aggressive Allocation ETF (積極股債配置)</option>
             </select>
             
             <button type="submit">計算</button>
         </form>
 
-        <div class="etf-descriptions">
-            <h3>ETF 說明：</h3>
-            <p>VT - 全球股票市場指數</p>
-            <p>VTI - 全美國股市指數</p>
-            <p>VOO - 追蹤標準普爾500指數</p>
-            <p>QQQ - 納斯達克科技股指數</p>
-            <p>SMH - 追蹤半導體產業</p>
-            <p>AOA - 積極股債配置</p>
-        </div>
-
-        <div id="etfDescription"></div>
         <div id="result"></div>
         <div id="chartContainer">
             <canvas id="investmentChart"></canvas>
@@ -160,43 +149,37 @@
     <script>
         const etfData = {
             VT: {
-                name: "Vanguard Total World Stock ETF",
-                description: "VT - 全球股票市場指數",
+                name: "Vanguard Total World Stock ETF (全球股票市場指數)",
                 annualReturn: 0.0943,
                 expense: 0.0007,
                 marketCapRank: 25
             },
             VTI: {
-                name: "Vanguard Total Stock Market ETF",
-                description: "VTI - 全美國股市指數",
+                name: "Vanguard Total Stock Market ETF (全美國股市指數)",
                 annualReturn: 0.1023,
                 expense: 0.0003,
                 marketCapRank: 1
             },
             VOO: {
-                name: "Vanguard S&P 500 ETF",
-                description: "VOO - 追蹤標準普爾500指數",
+                name: "Vanguard S&P 500 ETF (追蹤標準普爾500指數)",
                 annualReturn: 0.1131,
                 expense: 0.0003,
                 marketCapRank: 2
             },
             QQQ: {
-                name: "Invesco QQQ Trust",
-                description: "QQQ - 納斯達克科技股指數",
+                name: "Invesco QQQ Trust (納斯達克科技股指數)",
                 annualReturn: 0.1568,
                 expense: 0.0020,
                 marketCapRank: 5
             },
             SMH: {
-                name: "VanEck Semiconductor ETF",
-                description: "SMH - 追蹤半導體產業",
+                name: "VanEck Semiconductor ETF (追蹤半導體產業)",
                 annualReturn: 0.1723,
                 expense: 0.0035,
                 marketCapRank: 51
             },
             AOA: {
-                name: "iShares Core Aggressive Allocation ETF",
-                description: "AOA - 積極股債配置",
+                name: "iShares Core Aggressive Allocation ETF (積極股債配置)",
                 annualReturn: 0.0912,
                 expense: 0.0015,
                 marketCapRank: 1842
@@ -204,11 +187,6 @@
         };
 
         let chart;
-
-        document.getElementById('etfSelect').addEventListener('change', function() {
-            const selectedETF = this.value;
-            document.getElementById('etfDescription').textContent = '';
-        });
 
         document.getElementById('investmentForm').addEventListener('submit', function(e) {
             e.preventDefault();
