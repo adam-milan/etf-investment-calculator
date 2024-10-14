@@ -21,15 +21,29 @@
             border-radius: 5px;
             box-shadow: 0 0 10px rgba(0,0,0,0.1);
         }
-        h1 {
+        h1, h2, h3 {
             color: #333;
+        }
+        h1 {
             text-align: center;
+        }
+        .introduction, .etf-descriptions {
+            margin-bottom: 20px;
+            padding: 15px;
+            background-color: #f8f9fa;
+            border-radius: 5px;
+        }
+        .introduction p, .introduction ul, .etf-descriptions p {
+            margin-bottom: 10px;
+        }
+        .introduction ul {
+            padding-left: 20px;
         }
         label {
             display: block;
             margin-bottom: 5px;
         }
-        input[type="number"], select, textarea {
+        input[type="number"], select {
             width: 100%;
             padding: 8px;
             margin-bottom: 10px;
@@ -45,25 +59,53 @@
             border: none;
             border-radius: 4px;
             cursor: pointer;
+            margin-bottom: 20px;
         }
         button:hover {
             background-color: #45a049;
         }
-        #result, #etfDescription {
+        #result {
             margin-top: 20px;
             font-weight: bold;
         }
         #chartContainer {
             margin-top: 20px;
         }
-        #notes {
+        table {
+            width: 100%;
+            border-collapse: collapse;
             margin-top: 20px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
         }
     </style>
 </head>
 <body>
     <div class="container">
         <h1>美股ETF定期定額投資計算器</h1>
+        
+        <div class="introduction">
+            <h3>什麼是ETF？</h3>
+            <p>ETF（交易所交易基金）是一種投資工具，追蹤特定指數、行業、商品或其他資產，且ETF提供了一種簡單的方式來分散投資組合，同時保持較低的費用。</p>
+            
+            <h3>為什麼選擇定期定額投資？</h3>
+            <p>定期定額投資是一種投資策略，投資者定期投入固定金額到選定的投資工具中。這種方法有以下優點：</p>
+            <ul>
+                <li>降低市場時機選擇的風險</li>
+                <li>利用dollar-cost averaging（平均成本法）的優勢</li>
+                <li>培養良好的長期投資習慣</li>
+                <li>減少情緒化投資決策的影響</li>
+            </ul>
+            
+            <p>請記住，這個計算器提供的是基於歷史數據的估算，實際投資結果可能會有所不同。投資前請務必進行充分的研究，並考慮諮詢專業的財務顧問。</p>
+        </div>
+
         <form id="investmentForm">
             <label for="monthlyInvestment">每月投資金額 (新台幣):</label>
             <input type="number" id="monthlyInvestment" required>
@@ -77,46 +119,87 @@
                 <option value="QQQ">QQQ - Invesco QQQ Trust</option>
                 <option value="VT">VT - Vanguard Total World Stock ETF</option>
                 <option value="AOA">AOA - iShares Core Aggressive Allocation ETF</option>
+                <option value="VOO">VOO - Vanguard S&P 500 ETF</option>
+                <option value="SMH">SMH - VanEck Semiconductor ETF</option>
             </select>
             
             <button type="submit">計算</button>
         </form>
+
+        <div class="etf-descriptions">
+            <h3>ETF 說明：</h3>
+            <p>VTI - 全美國股市指數</p>
+            <p>QQQ - 納斯達克科技股指數</p>
+            <p>VT - 全球股票市場指數</p>
+            <p>AOA - 積極股債配置</p>
+            <p>VOO - 追蹤標準普爾500指數</p>
+            <p>SMH - 追蹤半導體產業</p>
+        </div>
+
         <div id="etfDescription"></div>
         <div id="result"></div>
         <div id="chartContainer">
             <canvas id="investmentChart"></canvas>
         </div>
-        <div id="notes">
-            <h3>備註</h3>
-            <textarea id="notesText" rows="4" placeholder="在此輸入您的備註..."></textarea>
-        </div>
+        
+        <table id="etfComparison">
+            <thead>
+                <tr>
+                    <th>ETF</th>
+                    <th>名稱</th>
+                    <th>費用率</th>
+                    <th>市值排名</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- 表格內容將由JavaScript動態填充 -->
+            </tbody>
+        </table>
     </div>
 
     <script>
         const etfData = {
             VTI: {
                 name: "Vanguard Total Stock Market ETF",
-                description: "VTI-全美國指數",
-                annualReturn: 0.1023, // 10.23% average annual return
-                expense: 0.0003 // 0.03% expense ratio
+                description: "VTI-全美國股市指數",
+                annualReturn: 0.1023,
+                expense: 0.0003,
+                marketCapRank: 1
             },
             QQQ: {
                 name: "Invesco QQQ Trust",
-                description: "QQQ-納斯達克100指數",
-                annualReturn: 0.1568, // 15.68% average annual return
-                expense: 0.0020 // 0.20% expense ratio
+                description: "QQQ-納斯達克科技股指數",
+                annualReturn: 0.1568,
+                expense: 0.0020,
+                marketCapRank: 5
             },
             VT: {
                 name: "Vanguard Total World Stock ETF",
-                description: "VT-全球股市指數",
-                annualReturn: 0.0943, // 9.43% average annual return
-                expense: 0.0007 // 0.07% expense ratio
+                description: "VT-全球股票市場指數",
+                annualReturn: 0.0943,
+                expense: 0.0007,
+                marketCapRank: 25
             },
             AOA: {
                 name: "iShares Core Aggressive Allocation ETF",
-                description: "AOA-進取型配置ETF",
-                annualReturn: 0.0912, // 9.12% average annual return
-                expense: 0.0015 // 0.15% expense ratio
+                description: "AOA-積極股債配置",
+                annualReturn: 0.0912,
+                expense: 0.0015,
+                marketCapRank: 1842
+            },
+            VOO: {
+                name: "Vanguard S&P 500 ETF",
+                description: "VOO-追蹤標準普爾500指數",
+                annualReturn: 0.1131,
+                expense: 0.0003,
+                marketCapRank: 2
+            },
+            SMH: {
+                name: "VanEck Semiconductor ETF",
+                description: "SMH-追蹤半導體產業",
+                annualReturn: 0.1723,
+                expense: 0.0035,
+                marketCapRank: 51
             }
         };
 
@@ -222,8 +305,24 @@
             });
         }
 
-        // 初始顯示第一個ETF的描述
-        document.getElementById('etfDescription').textContent = etfData[document.getElementById('etfSelect').value].description;
+        // 填充ETF比較表格
+        function populateETFTable() {
+            const tableBody = document.querySelector('#etfComparison tbody');
+            for (const [key, value] of Object.entries(etfData)) {
+                const row = tableBody.insertRow();
+                row.insertCell(0).textContent = key;
+                row.insertCell(1).textContent = value.name;
+                row.insertCell(2).textContent = (value.expense * 100).toFixed(2) + '%';
+                row.insertCell(3).textContent = value.marketCapRank;
+            }
+        }
+
+        // 頁面加載時填充表格
+        window.onload = function() {
+            populateETFTable();
+            // 初始顯示第一個ETF的描述
+            document.getElementById('etfDescription').textContent = etfData[document.getElementById('etfSelect').value].description;
+        };
     </script>
 </body>
 </html>
