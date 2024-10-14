@@ -1,245 +1,229 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
-<html>
+<!DOCTYPE html>
+<html lang="zh-TW">
 <head>
-  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-  <meta http-equiv="Content-Style-Type" content="text/css">
-  <title></title>
-  <meta name="Generator" content="Cocoa HTML Writer">
-  <meta name="CocoaVersion" content="2487.7">
-  <style type="text/css">
-    p.p1 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica}
-    p.p2 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica; min-height: 14.0px}
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>美股ETF定期定額投資計算器</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        input[type="number"], select, textarea {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        button {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        #result, #etfDescription {
+            margin-top: 20px;
+            font-weight: bold;
+        }
+        #chartContainer {
+            margin-top: 20px;
+        }
+        #notes {
+            margin-top: 20px;
+        }
+    </style>
 </head>
 <body>
-<p class="p1">&lt;!DOCTYPE html&gt;</p>
-<p class="p1">&lt;html lang="zh-TW"&gt;</p>
-<p class="p1">&lt;head&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;meta charset="UTF-8"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;title&gt;美股ETF定期定額投資計算器&lt;/title&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js"&gt;&lt;/script&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;style&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>body {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>font-family: Arial, sans-serif;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>line-height: 1.6;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>margin: 0;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>padding: 20px;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>background-color: #f4f4f4;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p1"><span class="Apple-converted-space">        </span>.container {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>max-width: 800px;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>margin: 0 auto;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>background-color: white;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>padding: 20px;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>border-radius: 5px;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>box-shadow: 0 0 10px rgba(0,0,0,0.1);</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p1"><span class="Apple-converted-space">        </span>h1 {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>color: #333;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>text-align: center;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p1"><span class="Apple-converted-space">        </span>label {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>display: block;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>margin-bottom: 5px;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p1"><span class="Apple-converted-space">        </span>input[type="number"], select, textarea {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>width: 100%;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>padding: 8px;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>margin-bottom: 10px;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>border: 1px solid #ddd;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>border-radius: 4px;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p1"><span class="Apple-converted-space">        </span>button {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>display: block;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>width: 100%;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>padding: 10px;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>background-color: #4CAF50;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>color: white;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>border: none;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>border-radius: 4px;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>cursor: pointer;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p1"><span class="Apple-converted-space">        </span>button:hover {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>background-color: #45a049;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p1"><span class="Apple-converted-space">        </span>#result, #etfDescription {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>margin-top: 20px;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>font-weight: bold;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p1"><span class="Apple-converted-space">        </span>#chartContainer {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>margin-top: 20px;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p1"><span class="Apple-converted-space">        </span>#notes {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>margin-top: 20px;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;/style&gt;</p>
-<p class="p1">&lt;/head&gt;</p>
-<p class="p1">&lt;body&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="container"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;h1&gt;美股ETF定期定額投資計算器&lt;/h1&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;form id="investmentForm"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;label for="monthlyInvestment"&gt;每月投資金額 (新台幣):&lt;/label&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;input type="number" id="monthlyInvestment" required&gt;</p>
-<p class="p2"><span class="Apple-converted-space">            </span></p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;label for="investmentPeriod"&gt;投資期間 (年):&lt;/label&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;input type="number" id="investmentPeriod" required&gt;</p>
-<p class="p2"><span class="Apple-converted-space">            </span></p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;label for="etfSelect"&gt;選擇ETF:&lt;/label&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;select id="etfSelect"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;option value="VTI"&gt;VTI - Vanguard Total Stock Market ETF&lt;/option&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;option value="QQQ"&gt;QQQ - Invesco QQQ Trust&lt;/option&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;option value="VT"&gt;VT - Vanguard Total World Stock ETF&lt;/option&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;option value="AOA"&gt;AOA - iShares Core Aggressive Allocation ETF&lt;/option&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;/select&gt;</p>
-<p class="p2"><span class="Apple-converted-space">            </span></p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;button type="submit"&gt;計算&lt;/button&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;/form&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;div id="etfDescription"&gt;&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;div id="result"&gt;&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;div id="chartContainer"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;canvas id="investmentChart"&gt;&lt;/canvas&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;div id="notes"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;h3&gt;備註&lt;/h3&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;textarea id="notesText" rows="4" placeholder="在此輸入您的備註..."&gt;&lt;/textarea&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;script&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>const etfData = {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>VTI: {</p>
-<p class="p1"><span class="Apple-converted-space">                </span>name: "Vanguard Total Stock Market ETF",</p>
-<p class="p1"><span class="Apple-converted-space">                </span>description: "VTI-全美國指數",</p>
-<p class="p1"><span class="Apple-converted-space">                </span>annualReturn: 0.1023, // 10.23% average annual return</p>
-<p class="p1"><span class="Apple-converted-space">                </span>expense: 0.0003 // 0.03% expense ratio</p>
-<p class="p1"><span class="Apple-converted-space">            </span>},</p>
-<p class="p1"><span class="Apple-converted-space">            </span>QQQ: {</p>
-<p class="p1"><span class="Apple-converted-space">                </span>name: "Invesco QQQ Trust",</p>
-<p class="p1"><span class="Apple-converted-space">                </span>description: "QQQ-納斯達克100指數",</p>
-<p class="p1"><span class="Apple-converted-space">                </span>annualReturn: 0.1568, // 15.68% average annual return</p>
-<p class="p1"><span class="Apple-converted-space">                </span>expense: 0.0020 // 0.20% expense ratio</p>
-<p class="p1"><span class="Apple-converted-space">            </span>},</p>
-<p class="p1"><span class="Apple-converted-space">            </span>VT: {</p>
-<p class="p1"><span class="Apple-converted-space">                </span>name: "Vanguard Total World Stock ETF",</p>
-<p class="p1"><span class="Apple-converted-space">                </span>description: "VT-全球股市指數",</p>
-<p class="p1"><span class="Apple-converted-space">                </span>annualReturn: 0.0943, // 9.43% average annual return</p>
-<p class="p1"><span class="Apple-converted-space">                </span>expense: 0.0007 // 0.07% expense ratio</p>
-<p class="p1"><span class="Apple-converted-space">            </span>},</p>
-<p class="p1"><span class="Apple-converted-space">            </span>AOA: {</p>
-<p class="p1"><span class="Apple-converted-space">                </span>name: "iShares Core Aggressive Allocation ETF",</p>
-<p class="p1"><span class="Apple-converted-space">                </span>description: "AOA-進取型配置ETF",</p>
-<p class="p1"><span class="Apple-converted-space">                </span>annualReturn: 0.0912, // 9.12% average annual return</p>
-<p class="p1"><span class="Apple-converted-space">                </span>expense: 0.0015 // 0.15% expense ratio</p>
-<p class="p1"><span class="Apple-converted-space">            </span>}</p>
-<p class="p1"><span class="Apple-converted-space">        </span>};</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>let chart;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>document.getElementById('etfSelect').addEventListener('change', function() {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>const selectedETF = this.value;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>document.getElementById('etfDescription').textContent = etfData[selectedETF].description;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>});</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>document.getElementById('investmentForm').addEventListener('submit', function(e) {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>e.preventDefault();</p>
-<p class="p2"><span class="Apple-converted-space">            </span></p>
-<p class="p1"><span class="Apple-converted-space">            </span>const monthlyInvestment = parseFloat(document.getElementById('monthlyInvestment').value);</p>
-<p class="p1"><span class="Apple-converted-space">            </span>const investmentPeriod = parseFloat(document.getElementById('investmentPeriod').value);</p>
-<p class="p1"><span class="Apple-converted-space">            </span>const selectedETF = document.getElementById('etfSelect').value;</p>
-<p class="p2"><span class="Apple-converted-space">            </span></p>
-<p class="p1"><span class="Apple-converted-space">            </span>const annualReturn = etfData[selectedETF].annualReturn - etfData[selectedETF].expense;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>const monthlyRate = annualReturn / 12;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>const totalMonths = investmentPeriod * 12;</p>
-<p class="p2"><span class="Apple-converted-space">            </span></p>
-<p class="p1"><span class="Apple-converted-space">            </span>const futureValue = monthlyInvestment * ((Math.pow(1 + monthlyRate, totalMonths) - 1) / monthlyRate) * (1 + monthlyRate);</p>
-<p class="p2"><span class="Apple-converted-space">            </span></p>
-<p class="p1"><span class="Apple-converted-space">            </span>const totalInvested = monthlyInvestment * totalMonths;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>const interestEarned = futureValue - totalInvested;</p>
-<p class="p2"><span class="Apple-converted-space">            </span></p>
-<p class="p1"><span class="Apple-converted-space">            </span>const resultDiv = document.getElementById('result');</p>
-<p class="p1"><span class="Apple-converted-space">            </span>resultDiv.innerHTML = `</p>
-<p class="p1"><span class="Apple-converted-space">                </span>選擇的ETF: ${etfData[selectedETF].name}&lt;br&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>投資總額: ${totalInvested.toLocaleString()} 新台幣&lt;br&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>預估收益: ${interestEarned.toLocaleString()} 新台幣&lt;br&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>最終金額: ${futureValue.toLocaleString()} 新台幣</p>
-<p class="p1"><span class="Apple-converted-space">            </span>`;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">            </span>updateChart(totalMonths, monthlyInvestment, monthlyRate);</p>
-<p class="p1"><span class="Apple-converted-space">        </span>});</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>function updateChart(totalMonths, monthlyInvestment, monthlyRate) {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>const labels = [];</p>
-<p class="p1"><span class="Apple-converted-space">            </span>const investedData = [];</p>
-<p class="p1"><span class="Apple-converted-space">            </span>const totalValueData = [];</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">            </span>let invested = 0;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>let totalValue = 0;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">            </span>for (let month = 0; month &lt;= totalMonths; month++) {</p>
-<p class="p1"><span class="Apple-converted-space">                </span>labels.push(month);</p>
-<p class="p1"><span class="Apple-converted-space">                </span>invested = monthlyInvestment * month;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>investedData.push(invested);</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">                </span>if (month === 0) {</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>totalValue = 0;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>} else {</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>totalValue = (totalValue + monthlyInvestment) * (1 + monthlyRate);</p>
-<p class="p1"><span class="Apple-converted-space">                </span>}</p>
-<p class="p1"><span class="Apple-converted-space">                </span>totalValueData.push(totalValue);</p>
-<p class="p1"><span class="Apple-converted-space">            </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">            </span>const ctx = document.getElementById('investmentChart').getContext('2d');</p>
-<p class="p2"><span class="Apple-converted-space">            </span></p>
-<p class="p1"><span class="Apple-converted-space">            </span>if (chart) {</p>
-<p class="p1"><span class="Apple-converted-space">                </span>chart.destroy();</p>
-<p class="p1"><span class="Apple-converted-space">            </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">            </span>chart = new Chart(ctx, {</p>
-<p class="p1"><span class="Apple-converted-space">                </span>type: 'line',</p>
-<p class="p1"><span class="Apple-converted-space">                </span>data: {</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>labels: labels,</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>datasets: [{</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>label: '投資總額',</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>data: investedData,</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>borderColor: 'rgba(75, 192, 192, 1)',</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>fill: false</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>}, {</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>label: '投資價值',</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>data: totalValueData,</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>borderColor: 'rgba(153, 102, 255, 1)',</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>fill: false</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>}]</p>
-<p class="p1"><span class="Apple-converted-space">                </span>},</p>
-<p class="p1"><span class="Apple-converted-space">                </span>options: {</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>responsive: true,</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>scales: {</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>x: {</p>
-<p class="p1"><span class="Apple-converted-space">                            </span>title: {</p>
-<p class="p1"><span class="Apple-converted-space">                                </span>display: true,</p>
-<p class="p1"><span class="Apple-converted-space">                                </span>text: '月數'</p>
-<p class="p1"><span class="Apple-converted-space">                            </span>}</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>},</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>y: {</p>
-<p class="p1"><span class="Apple-converted-space">                            </span>title: {</p>
-<p class="p1"><span class="Apple-converted-space">                                </span>display: true,</p>
-<p class="p1"><span class="Apple-converted-space">                                </span>text: '金額 (新台幣)'</p>
-<p class="p1"><span class="Apple-converted-space">                            </span>},</p>
-<p class="p1"><span class="Apple-converted-space">                            </span>ticks: {</p>
-<p class="p1"><span class="Apple-converted-space">                                </span>callback: function(value, index, values) {</p>
-<p class="p1"><span class="Apple-converted-space">                                    </span>return value.toLocaleString() + ' 元';</p>
-<p class="p1"><span class="Apple-converted-space">                                </span>}</p>
-<p class="p1"><span class="Apple-converted-space">                            </span>}</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>}</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>}</p>
-<p class="p1"><span class="Apple-converted-space">                </span>}</p>
-<p class="p1"><span class="Apple-converted-space">            </span>});</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>// 初始顯示第一個ETF的描述</p>
-<p class="p1"><span class="Apple-converted-space">        </span>document.getElementById('etfDescription').textContent = etfData[document.getElementById('etfSelect').value].description;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;/script&gt;</p>
-<p class="p1">&lt;/body&gt;</p>
-<p class="p1">&lt;/html&gt;</p>
+    <div class="container">
+        <h1>美股ETF定期定額投資計算器</h1>
+        <form id="investmentForm">
+            <label for="monthlyInvestment">每月投資金額 (新台幣):</label>
+            <input type="number" id="monthlyInvestment" required>
+            
+            <label for="investmentPeriod">投資期間 (年):</label>
+            <input type="number" id="investmentPeriod" required>
+            
+            <label for="etfSelect">選擇ETF:</label>
+            <select id="etfSelect">
+                <option value="VTI">VTI - Vanguard Total Stock Market ETF</option>
+                <option value="QQQ">QQQ - Invesco QQQ Trust</option>
+                <option value="VT">VT - Vanguard Total World Stock ETF</option>
+                <option value="AOA">AOA - iShares Core Aggressive Allocation ETF</option>
+            </select>
+            
+            <button type="submit">計算</button>
+        </form>
+        <div id="etfDescription"></div>
+        <div id="result"></div>
+        <div id="chartContainer">
+            <canvas id="investmentChart"></canvas>
+        </div>
+        <div id="notes">
+            <h3>備註</h3>
+            <textarea id="notesText" rows="4" placeholder="在此輸入您的備註..."></textarea>
+        </div>
+    </div>
+
+    <script>
+        const etfData = {
+            VTI: {
+                name: "Vanguard Total Stock Market ETF",
+                description: "VTI-全美國指數",
+                annualReturn: 0.1023, // 10.23% average annual return
+                expense: 0.0003 // 0.03% expense ratio
+            },
+            QQQ: {
+                name: "Invesco QQQ Trust",
+                description: "QQQ-納斯達克100指數",
+                annualReturn: 0.1568, // 15.68% average annual return
+                expense: 0.0020 // 0.20% expense ratio
+            },
+            VT: {
+                name: "Vanguard Total World Stock ETF",
+                description: "VT-全球股市指數",
+                annualReturn: 0.0943, // 9.43% average annual return
+                expense: 0.0007 // 0.07% expense ratio
+            },
+            AOA: {
+                name: "iShares Core Aggressive Allocation ETF",
+                description: "AOA-進取型配置ETF",
+                annualReturn: 0.0912, // 9.12% average annual return
+                expense: 0.0015 // 0.15% expense ratio
+            }
+        };
+
+        let chart;
+
+        document.getElementById('etfSelect').addEventListener('change', function() {
+            const selectedETF = this.value;
+            document.getElementById('etfDescription').textContent = etfData[selectedETF].description;
+        });
+
+        document.getElementById('investmentForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const monthlyInvestment = parseFloat(document.getElementById('monthlyInvestment').value);
+            const investmentPeriod = parseFloat(document.getElementById('investmentPeriod').value);
+            const selectedETF = document.getElementById('etfSelect').value;
+            
+            const annualReturn = etfData[selectedETF].annualReturn - etfData[selectedETF].expense;
+            const monthlyRate = annualReturn / 12;
+            const totalMonths = investmentPeriod * 12;
+            
+            const futureValue = monthlyInvestment * ((Math.pow(1 + monthlyRate, totalMonths) - 1) / monthlyRate) * (1 + monthlyRate);
+            
+            const totalInvested = monthlyInvestment * totalMonths;
+            const interestEarned = futureValue - totalInvested;
+            
+            const resultDiv = document.getElementById('result');
+            resultDiv.innerHTML = `
+                選擇的ETF: ${etfData[selectedETF].name}<br>
+                投資總額: ${totalInvested.toLocaleString()} 新台幣<br>
+                預估收益: ${interestEarned.toLocaleString()} 新台幣<br>
+                最終金額: ${futureValue.toLocaleString()} 新台幣
+            `;
+
+            updateChart(totalMonths, monthlyInvestment, monthlyRate);
+        });
+
+        function updateChart(totalMonths, monthlyInvestment, monthlyRate) {
+            const labels = [];
+            const investedData = [];
+            const totalValueData = [];
+
+            let invested = 0;
+            let totalValue = 0;
+
+            for (let month = 0; month <= totalMonths; month++) {
+                labels.push(month);
+                invested = monthlyInvestment * month;
+                investedData.push(invested);
+
+                if (month === 0) {
+                    totalValue = 0;
+                } else {
+                    totalValue = (totalValue + monthlyInvestment) * (1 + monthlyRate);
+                }
+                totalValueData.push(totalValue);
+            }
+
+            const ctx = document.getElementById('investmentChart').getContext('2d');
+            
+            if (chart) {
+                chart.destroy();
+            }
+
+            chart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: '投資總額',
+                        data: investedData,
+                        borderColor: 'rgba(75, 192, 192, 1)',
+                        fill: false
+                    }, {
+                        label: '投資價值',
+                        data: totalValueData,
+                        borderColor: 'rgba(153, 102, 255, 1)',
+                        fill: false
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        x: {
+                            title: {
+                                display: true,
+                                text: '月數'
+                            }
+                        },
+                        y: {
+                            title: {
+                                display: true,
+                                text: '金額 (新台幣)'
+                            },
+                            ticks: {
+                                callback: function(value, index, values) {
+                                    return value.toLocaleString() + ' 元';
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // 初始顯示第一個ETF的描述
+        document.getElementById('etfDescription').textContent = etfData[document.getElementById('etfSelect').value].description;
+    </script>
 </body>
 </html>
