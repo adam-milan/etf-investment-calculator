@@ -115,12 +115,12 @@
             
             <label for="etfSelect">選擇ETF:</label>
             <select id="etfSelect">
-                <option value="VTI">VTI - Vanguard Total Stock Market ETF</option>
-                <option value="QQQ">QQQ - Invesco QQQ Trust</option>
                 <option value="VT">VT - Vanguard Total World Stock ETF</option>
-                <option value="AOA">AOA - iShares Core Aggressive Allocation ETF</option>
+                <option value="VTI">VTI - Vanguard Total Stock Market ETF</option>
                 <option value="VOO">VOO - Vanguard S&P 500 ETF</option>
+                <option value="QQQ">QQQ - Invesco QQQ Trust</option>
                 <option value="SMH">SMH - VanEck Semiconductor ETF</option>
+                <option value="AOA">AOA - iShares Core Aggressive Allocation ETF</option>
             </select>
             
             <button type="submit">計算</button>
@@ -128,12 +128,12 @@
 
         <div class="etf-descriptions">
             <h3>ETF 說明：</h3>
-            <p>VTI - 全美國股市指數</p>
-            <p>QQQ - 納斯達克科技股指數</p>
             <p>VT - 全球股票市場指數</p>
-            <p>AOA - 積極股債配置</p>
+            <p>VTI - 全美國股市指數</p>
             <p>VOO - 追蹤標準普爾500指數</p>
+            <p>QQQ - 納斯達克科技股指數</p>
             <p>SMH - 追蹤半導體產業</p>
+            <p>AOA - 積極股債配置</p>
         </div>
 
         <div id="etfDescription"></div>
@@ -159,47 +159,47 @@
 
     <script>
         const etfData = {
-            VTI: {
-                name: "Vanguard Total Stock Market ETF",
-                description: "VTI-全美國股市指數",
-                annualReturn: 0.1023,
-                expense: 0.0003,
-                marketCapRank: 1
-            },
-            QQQ: {
-                name: "Invesco QQQ Trust",
-                description: "QQQ-納斯達克科技股指數",
-                annualReturn: 0.1568,
-                expense: 0.0020,
-                marketCapRank: 5
-            },
             VT: {
                 name: "Vanguard Total World Stock ETF",
-                description: "VT-全球股票市場指數",
+                description: "VT - 全球股票市場指數",
                 annualReturn: 0.0943,
                 expense: 0.0007,
                 marketCapRank: 25
             },
-            AOA: {
-                name: "iShares Core Aggressive Allocation ETF",
-                description: "AOA-積極股債配置",
-                annualReturn: 0.0912,
-                expense: 0.0015,
-                marketCapRank: 1842
+            VTI: {
+                name: "Vanguard Total Stock Market ETF",
+                description: "VTI - 全美國股市指數",
+                annualReturn: 0.1023,
+                expense: 0.0003,
+                marketCapRank: 1
             },
             VOO: {
                 name: "Vanguard S&P 500 ETF",
-                description: "VOO-追蹤標準普爾500指數",
+                description: "VOO - 追蹤標準普爾500指數",
                 annualReturn: 0.1131,
                 expense: 0.0003,
                 marketCapRank: 2
             },
+            QQQ: {
+                name: "Invesco QQQ Trust",
+                description: "QQQ - 納斯達克科技股指數",
+                annualReturn: 0.1568,
+                expense: 0.0020,
+                marketCapRank: 5
+            },
             SMH: {
                 name: "VanEck Semiconductor ETF",
-                description: "SMH-追蹤半導體產業",
+                description: "SMH - 追蹤半導體產業",
                 annualReturn: 0.1723,
                 expense: 0.0035,
                 marketCapRank: 51
+            },
+            AOA: {
+                name: "iShares Core Aggressive Allocation ETF",
+                description: "AOA - 積極股債配置",
+                annualReturn: 0.0912,
+                expense: 0.0015,
+                marketCapRank: 1842
             }
         };
 
@@ -207,7 +207,7 @@
 
         document.getElementById('etfSelect').addEventListener('change', function() {
             const selectedETF = this.value;
-            document.getElementById('etfDescription').textContent = etfData[selectedETF].description;
+            document.getElementById('etfDescription').textContent = '';
         });
 
         document.getElementById('investmentForm').addEventListener('submit', function(e) {
@@ -320,8 +320,6 @@
         // 頁面加載時填充表格
         window.onload = function() {
             populateETFTable();
-            // 初始顯示第一個ETF的描述
-            document.getElementById('etfDescription').textContent = etfData[document.getElementById('etfSelect').value].description;
         };
     </script>
 </body>
