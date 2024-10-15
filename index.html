@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>美股ETF定期定額投資計算器</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js"></script>
     <style>
         :root {
             --primary-color: #4a90e2;
@@ -34,11 +33,22 @@
             padding: 20px;
         }
 
-        h1 {
+        h1, h2 {
             color: var(--primary-color);
+            margin-bottom: 20px;
+        }
+
+        h1 {
             text-align: center;
             font-size: 2rem;
+        }
+
+        .introduction {
+            background-color: var(--card-background);
+            border-radius: 8px;
+            padding: 20px;
             margin-bottom: 30px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
 
         .calculator-form {
@@ -46,6 +56,10 @@
             flex-direction: column;
             gap: 15px;
             margin-bottom: 30px;
+            background-color: var(--card-background);
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
 
         label {
@@ -84,6 +98,8 @@
             border-collapse: collapse;
             margin-top: 30px;
             font-size: 14px;
+            background-color: var(--card-background);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
 
         .etf-table th, .etf-table td {
@@ -116,6 +132,22 @@
     <div class="container">
         <h1>美股ETF定期定額投資計算器</h1>
         
+        <div class="introduction">
+            <h2>什麼是ETF？</h2>
+            <p>ETF（交易所交易基金）是一種投資工具，追蹤特定指數、行業、商品或其他資產，且ETF提供了一種簡單的方式來分散投資組合，同時保持較低的費用。</p>
+            
+            <h2>為什麼選擇定期定額投資？</h2>
+            <p>定期定額投資是一種投資策略，投資者定期投入固定金額到選定的投資工具中。這種方法有以下優點：</p>
+            <ul>
+                <li>降低市場時機選擇的風險</li>
+                <li>利用dollar-cost averaging（平均成本法）的優勢</li>
+                <li>培養良好的長期投資習慣</li>
+                <li>減少情緒化投資決策的影響</li>
+            </ul>
+            
+            <p>請記住，這個計算器提供的是基於歷史數據的估算，實際投資結果可能會有所不同。投資前請務必進行充分的研究，並考慮諮詢專業的財務顧問。</p>
+        </div>
+        
         <form class="calculator-form" id="investmentForm">
             <label for="etfSelect">選擇ETF:</label>
             <select id="etfSelect">
@@ -123,8 +155,6 @@
                 <option value="VTI">VTI - Vanguard Total Stock Market ETF (全美國股市指數)</option>
                 <option value="VOO">VOO - Vanguard S&P 500 ETF (追蹤標準普爾500指數)</option>
                 <option value="VIG">VIG - Vanguard Dividend Appreciation ETF (股息增長指數)</option>
-                <option value="VUG">VUG - Vanguard Growth ETF (大型成長股指數)</option>
-                <option value="VTV">VTV - Vanguard Value ETF (大型價值股指數)</option>
                 <option value="QQQ">QQQ - Invesco QQQ Trust (納斯達克科技股指數)</option>
                 <option value="SMH">SMH - VanEck Semiconductor ETF (追蹤半導體產業)</option>
                 <option value="AOA">AOA - iShares Core Aggressive Allocation ETF (積極股債配置)</option>
@@ -149,7 +179,6 @@
                     <th>費用率</th>
                     <th>市值排名</th>
                     <th>年化報酬率</th>
-                    <th>波動率(標準差)</th>
                 </tr>
             </thead>
             <tbody id="etfComparisonBody">
@@ -164,64 +193,43 @@
                 name: "Vanguard Total World Stock ETF (全球股票市場指數)",
                 annualReturn: 0.0943,
                 expense: 0.0007,
-                marketCapRank: 22,
-                volatility: 0.1523
+                marketCapRank: 22
             },
             VTI: {
                 name: "Vanguard Total Stock Market ETF (全美國股市指數)",
                 annualReturn: 0.1023,
                 expense: 0.0003,
-                marketCapRank: 3,
-                volatility: 0.1612
+                marketCapRank: 3
             },
             VOO: {
                 name: "Vanguard S&P 500 ETF (追蹤標準普爾500指數)",
                 annualReturn: 0.1131,
                 expense: 0.0003,
-                marketCapRank: 2,
-                volatility: 0.1589
+                marketCapRank: 2
             },
             VIG: {
                 name: "Vanguard Dividend Appreciation ETF (股息增長指數)",
                 annualReturn: 0.0972,
                 expense: 0.0006,
-                marketCapRank: 12,
-                volatility: 0.1432
-            },
-            VUG: {
-                name: "Vanguard Growth ETF (大型成長股指數)",
-                annualReturn: 0.1256,
-                expense: 0.0004,
-                marketCapRank: 9,
-                volatility: 0.1823
-            },
-            VTV: {
-                name: "Vanguard Value ETF (大型價值股指數)",
-                annualReturn: 0.0897,
-                expense: 0.0004,
-                marketCapRank: 13,
-                volatility: 0.1512
+                marketCapRank: 12
             },
             QQQ: {
                 name: "Invesco QQQ Trust (納斯達克科技股指數)",
                 annualReturn: 0.1568,
                 expense: 0.0020,
-                marketCapRank: 4,
-                volatility: 0.2145
+                marketCapRank: 4
             },
             SMH: {
                 name: "VanEck Semiconductor ETF (追蹤半導體產業)",
                 annualReturn: 0.1723,
                 expense: 0.0035,
-                marketCapRank: 48,
-                volatility: 0.2678
+                marketCapRank: 48
             },
             AOA: {
                 name: "iShares Core Aggressive Allocation ETF (積極股債配置)",
                 annualReturn: 0.0912,
                 expense: 0.0015,
-                marketCapRank: 1572,
-                volatility: 0.1345
+                marketCapRank: 1572
             }
         };
 
@@ -234,7 +242,6 @@
                 row.insertCell(2).textContent = (value.expense * 100).toFixed(2) + '%';
                 row.insertCell(3).textContent = value.marketCapRank;
                 row.insertCell(4).textContent = (value.annualReturn * 100).toFixed(2) + '%';
-                row.insertCell(5).textContent = (value.volatility * 100).toFixed(2) + '%';
             }
         }
 
@@ -262,7 +269,6 @@
                 <p>預估收益: ${interestEarned.toLocaleString()} 新台幣</p>
                 <p>最終金額: ${futureValue.toLocaleString()} 新台幣</p>
                 <p>年化報酬率: ${(annualReturn * 100).toFixed(2)}%</p>
-                <p>波動率(標準差): ${(etfData[selectedETF].volatility * 100).toFixed(2)}%</p>
             `;
         });
 
