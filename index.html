@@ -6,36 +6,107 @@
     <title>美股ETF定期定額投資計算器</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js"></script>
     <style>
-        /* 保留之前的 CSS 樣式 */
-        /* ... */
-        
-        table {
+        :root {
+            --primary-color: #4a90e2;
+            --secondary-color: #f5a623;
+            --background-color: #f4f7fa;
+            --text-color: #333;
+            --card-background: #ffffff;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+            color: var(--text-color);
+            background-color: var(--background-color);
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        h1 {
+            color: var(--primary-color);
+            text-align: center;
+            font-size: 2rem;
+            margin-bottom: 30px;
+        }
+
+        .calculator-form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        label {
+            font-weight: bold;
+        }
+
+        select, input[type="number"], button {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+
+        button {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #3a7bd5;
+        }
+
+        #result {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #e8f0fe;
+            border-radius: 4px;
+        }
+
+        .etf-table {
             width: 100%;
             border-collapse: collapse;
             margin-top: 30px;
             font-size: 14px;
         }
 
-        th, td {
+        .etf-table th, .etf-table td {
             border: 1px solid #ddd;
-            padding: 8px;
+            padding: 10px;
             text-align: left;
         }
 
-        th {
+        .etf-table th {
             background-color: var(--primary-color);
             color: white;
         }
 
-        tr:nth-child(even) {
+        .etf-table tr:nth-child(even) {
             background-color: #f2f2f2;
         }
 
         @media (max-width: 768px) {
-            table {
+            .etf-table {
                 font-size: 12px;
             }
-            th, td {
+
+            .etf-table th, .etf-table td {
                 padding: 6px;
             }
         }
@@ -45,55 +116,46 @@
     <div class="container">
         <h1>美股ETF定期定額投資計算器</h1>
         
-        <!-- 保留之前的介紹部分 -->
-        
-        <div class="card">
-            <form id="investmentForm">
-                <!-- 保留之前的表單內容 -->
-                <div>
-                    <label for="etfSelect">選擇ETF:</label>
-                    <select id="etfSelect">
-                        <option value="VT">VT - Vanguard Total World Stock ETF (全球股票市場指數)</option>
-                        <option value="VTI">VTI - Vanguard Total Stock Market ETF (全美國股市指數)</option>
-                        <option value="VOO">VOO - Vanguard S&P 500 ETF (追蹤標準普爾500指數)</option>
-                        <option value="VIG">VIG - Vanguard Dividend Appreciation ETF (股息增長指數)</option>
-                        <option value="VUG">VUG - Vanguard Growth ETF (大型成長股指數)</option>
-                        <option value="VTV">VTV - Vanguard Value ETF (大型價值股指數)</option>
-                        <option value="QQQ">QQQ - Invesco QQQ Trust (納斯達克科技股指數)</option>
-                        <option value="SMH">SMH - VanEck Semiconductor ETF (追蹤半導體產業)</option>
-                        <option value="AOA">AOA - iShares Core Aggressive Allocation ETF (積極股債配置)</option>
-                    </select>
-                </div>
-                
-                <button type="submit">計算</button>
-            </form>
+        <form class="calculator-form" id="investmentForm">
+            <label for="etfSelect">選擇ETF:</label>
+            <select id="etfSelect">
+                <option value="VT">VT - Vanguard Total World Stock ETF (全球股票市場指數)</option>
+                <option value="VTI">VTI - Vanguard Total Stock Market ETF (全美國股市指數)</option>
+                <option value="VOO">VOO - Vanguard S&P 500 ETF (追蹤標準普爾500指數)</option>
+                <option value="VIG">VIG - Vanguard Dividend Appreciation ETF (股息增長指數)</option>
+                <option value="VUG">VUG - Vanguard Growth ETF (大型成長股指數)</option>
+                <option value="VTV">VTV - Vanguard Value ETF (大型價值股指數)</option>
+                <option value="QQQ">QQQ - Invesco QQQ Trust (納斯達克科技股指數)</option>
+                <option value="SMH">SMH - VanEck Semiconductor ETF (追蹤半導體產業)</option>
+                <option value="AOA">AOA - iShares Core Aggressive Allocation ETF (積極股債配置)</option>
+            </select>
+            
+            <label for="monthlyInvestment">每月投資金額 (新台幣):</label>
+            <input type="number" id="monthlyInvestment" required>
+            
+            <label for="investmentPeriod">投資期間 (年):</label>
+            <input type="number" id="investmentPeriod" required>
+            
+            <button type="submit">計算</button>
+        </form>
 
-            <div id="result"></div>
-        </div>
+        <div id="result"></div>
 
-        <div class="card">
-            <div id="chartContainer">
-                <canvas id="investmentChart"></canvas>
-            </div>
-        </div>
-        
-        <div class="card">
-            <table id="etfComparison">
-                <thead>
-                    <tr>
-                        <th>ETF</th>
-                        <th>名稱</th>
-                        <th>費用率</th>
-                        <th>市值排名</th>
-                        <th>年化報酬率</th>
-                        <th>波動率(標準差)</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <!-- 表格內容將由JavaScript動態填充 -->
-                </tbody>
-            </table>
-        </div>
+        <table class="etf-table">
+            <thead>
+                <tr>
+                    <th>ETF</th>
+                    <th>名稱</th>
+                    <th>費用率</th>
+                    <th>市值排名</th>
+                    <th>年化報酬率</th>
+                    <th>波動率(標準差)</th>
+                </tr>
+            </thead>
+            <tbody id="etfComparisonBody">
+                <!-- 表格內容將由JavaScript動態填充 -->
+            </tbody>
+        </table>
     </div>
 
     <script>
@@ -163,7 +225,18 @@
             }
         };
 
-        let chart;
+        function populateETFTable() {
+            const tableBody = document.getElementById('etfComparisonBody');
+            for (const [key, value] of Object.entries(etfData)) {
+                const row = tableBody.insertRow();
+                row.insertCell(0).textContent = key;
+                row.insertCell(1).textContent = value.name;
+                row.insertCell(2).textContent = (value.expense * 100).toFixed(2) + '%';
+                row.insertCell(3).textContent = value.marketCapRank;
+                row.insertCell(4).textContent = (value.annualReturn * 100).toFixed(2) + '%';
+                row.insertCell(5).textContent = (value.volatility * 100).toFixed(2) + '%';
+            }
+        }
 
         document.getElementById('investmentForm').addEventListener('submit', function(e) {
             e.preventDefault();
@@ -191,31 +264,9 @@
                 <p>年化報酬率: ${(annualReturn * 100).toFixed(2)}%</p>
                 <p>波動率(標準差): ${(etfData[selectedETF].volatility * 100).toFixed(2)}%</p>
             `;
-
-            updateChart(totalMonths, monthlyInvestment, monthlyRate);
         });
 
-        function updateChart(totalMonths, monthlyInvestment, monthlyRate) {
-            // 保留之前的圖表更新代碼
-            // ...
-        }
-
-        function populateETFTable() {
-            const tableBody = document.querySelector('#etfComparison tbody');
-            for (const [key, value] of Object.entries(etfData)) {
-                const row = tableBody.insertRow();
-                row.insertCell(0).textContent = key;
-                row.insertCell(1).textContent = value.name;
-                row.insertCell(2).textContent = (value.expense * 100).toFixed(2) + '%';
-                row.insertCell(3).textContent = value.marketCapRank;
-                row.insertCell(4).textContent = (value.annualReturn * 100).toFixed(2) + '%';
-                row.insertCell(5).textContent = (value.volatility * 100).toFixed(2) + '%';
-            }
-        }
-
-        window.onload = function() {
-            populateETFTable();
-        };
+        window.onload = populateETFTable;
     </script>
 </body>
 </html>
