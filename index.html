@@ -52,7 +52,7 @@
         }
 
         .introduction h2 {
-            color: var(--primary-color);
+            color: var(--secondary-color);
             font-size: 1.2rem;
             margin-top: 20px;
         }
@@ -65,8 +65,81 @@
             padding-left: 20px;
         }
 
-        /* 其餘樣式保持不變 */
+        .calculator-form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-bottom: 30px;
+            background-color: var(--card-background);
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
 
+        label {
+            font-weight: bold;
+        }
+
+        select, input[type="number"], button {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+
+        button {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #3a7bd5;
+        }
+
+        #result {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #e8f0fe;
+            border-radius: 4px;
+        }
+
+        .etf-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 30px;
+            font-size: 14px;
+            background-color: var(--card-background);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .etf-table th, .etf-table td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: left;
+        }
+
+        .etf-table th {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .etf-table tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        @media (max-width: 768px) {
+            .etf-table {
+                font-size: 12px;
+            }
+
+            .etf-table th, .etf-table td {
+                padding: 6px;
+            }
+        }
     </style>
 </head>
 <body>
@@ -88,12 +161,122 @@
             <p>請記住，這個計算器提供的是基於歷史數據的估算，實際投資結果可能會有所不同。投資前請務必進行充分的研究，並考慮諮詢專業的財務顧問。</p>
         </div>
         
-        <!-- 表單和表格部分保持不變 -->
+        <form class="calculator-form" id="investmentForm">
+            <label for="etfSelect">選擇ETF:</label>
+            <select id="etfSelect">
+                <option value="VT">VT - Vanguard Total World Stock ETF (全球股票市場指數)</option>
+                <option value="VTI">VTI - Vanguard Total Stock Market ETF (全美國股市指數)</option>
+                <option value="VOO">VOO - Vanguard S&P 500 ETF (追蹤標準普爾500指數)</option>
+                <option value="VIG">VIG - Vanguard Dividend Appreciation ETF (股息增長指數)</option>
+                <option value="QQQ">QQQ - Invesco QQQ Trust (納斯達克科技股指數)</option>
+                <option value="SMH">SMH - VanEck Semiconductor ETF (追蹤半導體產業)</option>
+                <option value="AOA">AOA - iShares Core Aggressive Allocation ETF (積極股債配置)</option>
+            </select>
+            
+            <label for="monthlyInvestment">每月投資金額 (新台幣):</label>
+            <input type="number" id="monthlyInvestment" required>
+            
+            <label for="investmentPeriod">投資期間 (年):</label>
+            <input type="number" id="investmentPeriod" required>
+            
+            <button type="submit">計算</button>
+        </form>
 
+        <div id="result"></div>
+
+        <table class="etf-table">
+            <thead>
+                <tr>
+                    <th>ETF</th>
+                    <th>名稱</th>
+                    <th>費用率</th>
+                    <th>年化報酬率</th>
+                </tr>
+            </thead>
+            <tbody id="etfComparisonBody">
+                <!-- 表格內容將由JavaScript動態填充 -->
+            </tbody>
+        </table>
     </div>
 
     <script>
-        // JavaScript 代碼保持不變
+        const etfData = {
+            VT: {
+                name: "Vanguard Total World Stock ETF (全球股票市場指數)",
+                annualReturn: 0.0943,
+                expense: 0.0007
+            },
+            VTI: {
+                name: "Vanguard Total Stock Market ETF (全美國股市指數)",
+                annualReturn: 0.1023,
+                expense: 0.0003
+            },
+            VOO: {
+                name: "Vanguard S&P 500 ETF (追蹤標準普爾500指數)",
+                annualReturn: 0.1131,
+                expense: 0.0003
+            },
+            VIG: {
+                name: "Vanguard Dividend Appreciation ETF (股息增長指數)",
+                annualReturn: 0.0972,
+                expense: 0.0006
+            },
+            QQQ: {
+                name: "Invesco QQQ Trust (納斯達克科技股指數)",
+                annualReturn: 0.1568,
+                expense: 0.0020
+            },
+            SMH: {
+                name: "VanEck Semiconductor ETF (追蹤半導體產業)",
+                annualReturn: 0.1723,
+                expense: 0.0035
+            },
+            AOA: {
+                name: "iShares Core Aggressive Allocation ETF (積極股債配置)",
+                annualReturn: 0.0912,
+                expense: 0.0015
+            }
+        };
+
+        function populateETFTable() {
+            const tableBody = document.getElementById('etfComparisonBody');
+            for (const [key, value] of Object.entries(etfData)) {
+                const row = tableBody.insertRow();
+                row.insertCell(0).textContent = key;
+                row.insertCell(1).textContent = value.name;
+                row.insertCell(2).textContent = (value.expense * 100).toFixed(2) + '%';
+                row.insertCell(3).textContent = (value.annualReturn * 100).toFixed(2) + '%';
+            }
+        }
+
+        document.getElementById('investmentForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const monthlyInvestment = parseFloat(document.getElementById('monthlyInvestment').value);
+            const investmentPeriod = parseFloat(document.getElementById('investmentPeriod').value);
+            const selectedETF = document.getElementById('etfSelect').value;
+            
+            const annualReturn = etfData[selectedETF].annualReturn - etfData[selectedETF].expense;
+            const monthlyRate = annualReturn / 12;
+            const totalMonths = investmentPeriod * 12;
+            
+            const futureValue = monthlyInvestment * ((Math.pow(1 + monthlyRate, totalMonths) - 1) / monthlyRate) * (1 + monthlyRate);
+            
+            const totalInvested = monthlyInvestment * totalMonths;
+            const interestEarned = futureValue - totalInvested;
+            
+            const resultDiv = document.getElementById('result');
+            resultDiv.innerHTML = `
+                <h3>投資結果</h3>
+                <p>選擇的ETF: ${etfData[selectedETF].name}</p>
+                <p>投資總額: ${totalInvested.toLocaleString()} 新台幣</p>
+                <p>預估收益: ${interestEarned.toLocaleString()} 新台幣</p>
+                <p>最終金額: ${futureValue.toLocaleString()} 新台幣</p>
+                <p>年化報酬率: ${(annualReturn * 100).toFixed(2)}%</p>
+            `;
+        });
+
+        window.onload = populateETFTable;
     </script>
 </body>
 </html>
