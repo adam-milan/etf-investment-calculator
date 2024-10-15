@@ -6,83 +6,147 @@
     <title>美股ETF定期定額投資計算器</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js"></script>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            line-height: 1.6;
+        :root {
+            --primary-color: #4a90e2;
+            --secondary-color: #f5a623;
+            --background-color: #f4f7fa;
+            --text-color: #333;
+            --card-background: #ffffff;
+        }
+
+        * {
+            box-sizing: border-box;
             margin: 0;
-            padding: 20px;
-            background-color: #f4f4f4;
+            padding: 0;
         }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+            color: var(--text-color);
+            background-color: var(--background-color);
+            padding: 20px;
+        }
+
         .container {
-            max-width: 800px;
+            max-width: 1200px;
             margin: 0 auto;
-            background-color: white;
             padding: 20px;
-            border-radius: 5px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
         }
+
         h1, h2, h3 {
-            color: #333;
+            color: var(--primary-color);
+            margin-bottom: 20px;
         }
+
         h1 {
             text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 30px;
         }
-        .introduction {
+
+        .card {
+            background-color: var(--card-background);
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 20px;
             margin-bottom: 20px;
-            padding: 15px;
-            background-color: #f8f9fa;
-            border-radius: 5px;
         }
+
+        .introduction {
+            margin-bottom: 30px;
+        }
+
         .introduction p, .introduction ul {
-            margin-bottom: 10px;
+            margin-bottom: 15px;
         }
+
         .introduction ul {
             padding-left: 20px;
         }
+
+        form {
+            display: grid;
+            gap: 15px;
+        }
+
         label {
-            display: block;
-            margin-bottom: 5px;
-        }
-        input[type="number"], select {
-            width: 100%;
-            padding: 8px;
-            margin-bottom: 10px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-        }
-        button {
-            display: block;
-            width: 100%;
-            padding: 10px;
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            margin-bottom: 20px;
-        }
-        button:hover {
-            background-color: #45a049;
-        }
-        #result {
-            margin-top: 20px;
             font-weight: bold;
         }
-        #chartContainer {
-            margin-top: 20px;
+
+        input[type="number"], select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
         }
+
+        button {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #3a7bd5;
+        }
+
+        #result {
+            font-weight: bold;
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #e8f0fe;
+            border-radius: 4px;
+        }
+
+        #chartContainer {
+            margin-top: 30px;
+            height: 400px;
+        }
+
         table {
             width: 100%;
             border-collapse: collapse;
-            margin-top: 20px;
+            margin-top: 30px;
         }
+
         th, td {
             border: 1px solid #ddd;
-            padding: 8px;
+            padding: 12px;
             text-align: left;
         }
+
         th {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        tr:nth-child(even) {
             background-color: #f2f2f2;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+
+            h1 {
+                font-size: 2rem;
+            }
+
+            .card {
+                padding: 15px;
+            }
+
+            table {
+                font-size: 14px;
+            }
         }
     </style>
 </head>
@@ -90,68 +154,83 @@
     <div class="container">
         <h1>美股ETF定期定額投資計算器</h1>
         
-        <div class="introduction">
-            <h3>什麼是ETF？</h3>
+        <div class="card introduction">
+            <h2>什麼是ETF？</h2>
             <p>ETF（交易所交易基金）是一種投資工具，追蹤特定指數、行業、商品或其他資產，且ETF提供了一種簡單的方式來分散投資組合，同時保持較低的費用。</p>
             
-            <h3>為什麼選擇定期定額投資？</h3>
+            <h2>為什麼選擇定期定額投資？</h2>
+            <p>定期定額投資是一種投資策略，投資者定期投入固定金額到選定的投資工具中。這種方法有以下優點：</p>
             <ul>
-                <li>降低選擇市場時機的風險</li>
-                <li>利用平均成本法 dollar-cost averaging 的優勢</li>
+                <li>降低市場時機選擇的風險</li>
+                <li>利用dollar-cost averaging（平均成本法）的優勢</li>
                 <li>培養良好的長期投資習慣</li>
-                <li>減少情緒化投資決策</li>
+                <li>減少情緒化投資決策的影響</li>
             </ul>
             
             <p>請記住，這個計算器提供的是基於歷史數據的估算，實際投資結果可能會有所不同。投資前請務必進行充分的研究，並考慮諮詢專業的財務顧問。</p>
         </div>
 
-        <form id="investmentForm">
-            <label for="monthlyInvestment">每月投資金額 (新台幣):</label>
-            <input type="number" id="monthlyInvestment" required>
-            
-            <label for="investmentPeriod">投資期間 (年):</label>
-            <input type="number" id="investmentPeriod" required>
-            
-            <label for="etfSelect">選擇ETF:</label>
-            <select id="etfSelect">
-                <option value="VT">VT - Vanguard Total World Stock ETF (全球股票市場指數)</option>
-                <option value="VTI">VTI - Vanguard Total Stock Market ETF (全美國股市指數)</option>
-                <option value="VOO">VOO - Vanguard S&P 500 ETF (追蹤標準普爾500指數)</option>
-                <option value="QQQ">QQQ - Invesco QQQ Trust (納斯達克科技股指數)</option>
-                <option value="SMH">SMH - VanEck Semiconductor ETF (追蹤半導體產業)</option>
-                <option value="AOA">AOA - iShares Core Aggressive Allocation ETF (積極股債配置)</option>
-            </select>
-            
-            <button type="submit">計算</button>
-        </form>
+        <div class="card">
+            <form id="investmentForm">
+                <div>
+                    <label for="monthlyInvestment">每月投資金額 (新台幣):</label>
+                    <input type="number" id="monthlyInvestment" required>
+                </div>
+                
+                <div>
+                    <label for="investmentPeriod">投資期間 (年):</label>
+                    <input type="number" id="investmentPeriod" required>
+                </div>
+                
+                <div>
+                    <label for="etfSelect">選擇ETF:</label>
+                    <select id="etfSelect">
+                        <option value="VT">VT - Vanguard Total World Stock ETF (全球股票市場指數)</option>
+                        <option value="VTI">VTI - Vanguard Total Stock Market ETF (全美國股市指數)</option>
+                        <option value="VOO">VOO - Vanguard S&P 500 ETF (追蹤標準普爾500指數)</option>
+                        <option value="QQQ">QQQ - Invesco QQQ Trust (納斯達克科技股指數)</option>
+                        <option value="SMH">SMH - VanEck Semiconductor ETF (追蹤半導體產業)</option>
+                        <option value="AOA">AOA - iShares Core Aggressive Allocation ETF (積極股債配置)</option>
+                    </select>
+                </div>
+                
+                <button type="submit">計算</button>
+            </form>
 
-        <div id="result"></div>
-        <div id="chartContainer">
-            <canvas id="investmentChart"></canvas>
+            <div id="result"></div>
+        </div>
+
+        <div class="card">
+            <div id="chartContainer">
+                <canvas id="investmentChart"></canvas>
+            </div>
         </div>
         
-        <table id="etfComparison">
-            <thead>
-                <tr>
-                    <th>ETF</th>
-                    <th>名稱</th>
-                    <th>費用率</th>
-                    <th>市值排名</th>
-                </tr>
-            </thead>
-            <tbody>
-                <!-- 表格內容將由JavaScript動態填充 -->
-            </tbody>
-        </table>
+        <div class="card">
+            <table id="etfComparison">
+                <thead>
+                    <tr>
+                        <th>ETF</th>
+                        <th>名稱</th>
+                        <th>費用率</th>
+                        <th>市值排名</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- 表格內容將由JavaScript動態填充 -->
+                </tbody>
+            </table>
+        </div>
     </div>
 
     <script>
+        // JavaScript 代碼保持不變
         const etfData = {
             VT: {
                 name: "Vanguard Total World Stock ETF (全球股票市場指數)",
                 annualReturn: 0.0943,
                 expense: 0.0007,
-                marketCapRank: 25
+                marketCapRank: 22
             },
             VTI: {
                 name: "Vanguard Total Stock Market ETF (全美國股市指數)",
@@ -175,13 +254,13 @@
                 name: "VanEck Semiconductor ETF (追蹤半導體產業)",
                 annualReturn: 0.1723,
                 expense: 0.0035,
-                marketCapRank: 51
+                marketCapRank: 48
             },
             AOA: {
                 name: "iShares Core Aggressive Allocation ETF (積極股債配置)",
                 annualReturn: 0.0912,
                 expense: 0.0015,
-                marketCapRank: 1842
+                marketCapRank: 1572
             }
         };
 
@@ -205,10 +284,11 @@
             
             const resultDiv = document.getElementById('result');
             resultDiv.innerHTML = `
-                選擇的ETF: ${etfData[selectedETF].name}<br>
-                投資總額: ${totalInvested.toLocaleString()} 新台幣<br>
-                預估收益: ${interestEarned.toLocaleString()} 新台幣<br>
-                最終金額: ${futureValue.toLocaleString()} 新台幣
+                <h3>投資結果</h3>
+                <p>選擇的ETF: ${etfData[selectedETF].name}</p>
+                <p>投資總額: ${totalInvested.toLocaleString()} 新台幣</p>
+                <p>預估收益: ${interestEarned.toLocaleString()} 新台幣</p>
+                <p>最終金額: ${futureValue.toLocaleString()} 新台幣</p>
             `;
 
             updateChart(totalMonths, monthlyInvestment, monthlyRate);
@@ -282,7 +362,6 @@
             });
         }
 
-        // 填充ETF比較表格
         function populateETFTable() {
             const tableBody = document.querySelector('#etfComparison tbody');
             for (const [key, value] of Object.entries(etfData)) {
@@ -294,7 +373,6 @@
             }
         }
 
-        // 頁面加載時填充表格
         window.onload = function() {
             populateETFTable();
         };
