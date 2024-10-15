@@ -51,6 +51,20 @@
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
 
+        .introduction h2 {
+            color: var(--secondary-color);
+            font-size: 1.2rem;
+            margin-top: 20px;
+        }
+
+        .introduction p, .introduction ul {
+            margin-bottom: 15px;
+        }
+
+        .introduction ul {
+            padding-left: 20px;
+        }
+
         .calculator-form {
             display: flex;
             flex-direction: column;
@@ -176,7 +190,6 @@
                     <th>ETF</th>
                     <th>名稱</th>
                     <th>費用率</th>
-                    <th>市值排名</th>
                     <th>年化報酬率</th>
                 </tr>
             </thead>
@@ -191,44 +204,37 @@
             VT: {
                 name: "Vanguard Total World Stock ETF (全球股票市場指數)",
                 annualReturn: 0.0943,
-                expense: 0.0007,
-                marketCapRank: 22
+                expense: 0.0007
             },
             VTI: {
                 name: "Vanguard Total Stock Market ETF (全美國股市指數)",
                 annualReturn: 0.1023,
-                expense: 0.0003,
-                marketCapRank: 3
+                expense: 0.0003
             },
             VOO: {
                 name: "Vanguard S&P 500 ETF (追蹤標準普爾500指數)",
                 annualReturn: 0.1131,
-                expense: 0.0003,
-                marketCapRank: 2
+                expense: 0.0003
             },
             VIG: {
                 name: "Vanguard Dividend Appreciation ETF (股息增長指數)",
                 annualReturn: 0.0972,
-                expense: 0.0006,
-                marketCapRank: 12
+                expense: 0.0006
             },
             QQQ: {
                 name: "Invesco QQQ Trust (納斯達克科技股指數)",
                 annualReturn: 0.1568,
-                expense: 0.0020,
-                marketCapRank: 4
+                expense: 0.0020
             },
             SMH: {
                 name: "VanEck Semiconductor ETF (追蹤半導體產業)",
                 annualReturn: 0.1723,
-                expense: 0.0035,
-                marketCapRank: 48
+                expense: 0.0035
             },
             AOA: {
                 name: "iShares Core Aggressive Allocation ETF (積極股債配置)",
                 annualReturn: 0.0912,
-                expense: 0.0015,
-                marketCapRank: 1572
+                expense: 0.0015
             }
         };
 
@@ -239,8 +245,7 @@
                 row.insertCell(0).textContent = key;
                 row.insertCell(1).textContent = value.name;
                 row.insertCell(2).textContent = (value.expense * 100).toFixed(2) + '%';
-                row.insertCell(3).textContent = value.marketCapRank;
-                row.insertCell(4).textContent = (value.annualReturn * 100).toFixed(2) + '%';
+                row.insertCell(3).textContent = (value.annualReturn * 100).toFixed(2) + '%';
             }
         }
 
